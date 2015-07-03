@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*- 
 
 import time
@@ -13,7 +13,7 @@ from selenium.webdriver.support.ui              import Select
 from selenium.webdriver.support.ui              import WebDriverWait
 from selenium.webdriver.remote.webelement       import WebElement
 from selenium.webdriver.remote.webdriver        import WebDriver
-from selenium.common                            import exceptions as EX
+from selenium.common                            import exceptions
 from selenium.common.exceptions                 import NoSuchElementException
 from selenium.common.exceptions                 import NoAlertPresentException
 from selenium.common.exceptions                 import TimeoutException
@@ -39,5 +39,12 @@ class Driver(object):
         pass
         
     
-        
+class Object( object ):
+    pass
+
+
+if __name__ == '__main__':
+    print('The Selenium Framework is not intended to run as a script.')
+    print('Add the following line to your scripts or type this in your Python session:')
+    print('\timport SeleniumFramework as sf')
         

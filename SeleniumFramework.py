@@ -53,7 +53,6 @@ class Driver(object):
         '''Given a locator string of the format:
             type=value,
         return the valid locator pieces.'''
-        By = self.By
         locator_map = {
             'id'    : By.ID,
             'name'  : By.NAME,

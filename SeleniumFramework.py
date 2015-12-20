@@ -27,7 +27,7 @@ from selenium.common.exceptions                 import TimeoutException
 
 ################################################################################
 # Module Variables
-    
+
 ################################################################################
 # Module Classes
 
@@ -43,7 +43,7 @@ class Driver(object):
         self.WebElement = WebElement
         self.Select = Select
         self.Keys = Keys
-        
+
     ############################################################################
     # Browser-dependent Methods
     ############################################################################
@@ -57,6 +57,21 @@ class Driver(object):
                 alert.dismiss()
             return alert_text
         except NoAlertPresentException:
+            return False
+
+    def control_click(self, webelement, container=None):
+        if container is None:
+            container = self.browser
+        try:
+            #AC(container).key_down(Keys.CONTROL).click(webelement).key_up(Keys.CONTROL).perform()
+            AC(container)\
+                .context_click(webelement)\
+                .send_keys(Keys.ARROW_DOWN)\
+                .send_keys(Keys.ENTER)\
+                .perform()
+            self.wait(.5)
+            return True
+        except:
             return False
 
     def double_click(self, webelement, container=None):
@@ -85,11 +100,15 @@ class Driver(object):
         except TimeoutException:
             element_list = []
         return element_list
-        
+
+    def goto(self, url):
+        '''Navigate to the given url.'''
+        self.browser.get(url)
+
     def is_element_clickable(self, webelement):
         #if not isinstance(webelement, self.WebElement):
         #    return False
-        if (webelement.is_displayed() and 
+        if (webelement.is_displayed() and
             webelement.is_enabled() and
             webelement.size['width'] > 0 and
             webelement.size['height'] > 0
@@ -121,7 +140,7 @@ class Driver(object):
                         if button.is_selected()
                         ]
         return field_value
-    
+
     def open(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
         browsers = {
             #local driver name, remote driver capabilities
@@ -151,9 +170,6 @@ class Driver(object):
             self.close      = self.browser.quit
         else:
             self.close      = self.browser.close
-
-        # Setup the driver goto method
-        self.goto       = self.browser.get
 
     def right_click(self, webelement, container=None):
         if container is None:
@@ -187,12 +203,12 @@ class Driver(object):
             if not append:
                 select_element.deselect_all()
             if isinstance(field_value, list):
-                [select_element.select_by_visible_text(str(item)) 
+                [select_element.select_by_visible_text(str(item))
                     for item in field_value
                     ]
             elif isinstance(field_value, str):
                 select_element.select_by_visible_text(field_value)
-                    
+
     def set_window(self, window_size, window_position):
         self.browser.set_window_size(window_size[0], window_size[1])
         self.browser.set_window_position(window_position[0], window_position[1])
@@ -279,4 +295,3 @@ if __name__ == '__main__':
     print('Add the following line to your scripts or type this in your \
            Python session:')
     print('\timport SeleniumFramework as sf')
-

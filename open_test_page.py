@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import SeleniumFramework as sf
 import config
@@ -8,10 +8,8 @@ def cb():
     d.close()
     exit()
 d.open(
-    browser_name=config.browser_name, 
-    selenium_hub=config.selenium_hub, 
+    browser_name=config.browser_name,
+    selenium_hub=config.selenium_hub,
     selenium_port=config.selenium_port
     )
 d.goto(config.test_page)
-
-

@@ -3,7 +3,7 @@ selenium_hub = 'local'
 selenium_port = '4444'
 browser_name = 'gc'
 
-test_server = 'http://localhost:8080/'
+test_server = 'http://localhost:8000/'
 #test_server = 'file://_sampleWebpage/'
 
 test_page = '{}test_page.html'.format(test_server)

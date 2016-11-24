@@ -3,6 +3,12 @@
 
 ################################################################################
 # Selenium Framework
+__title__ = 'Selenium Framework'
+__version__ = '0.3.1'
+__license__ = 'MIT'
+__copyright__ = '2011 - 2016'
+__author__ = 'John Dahl'
+__date__ = '2016-11-23'
 ################################################################################
 
 import os
@@ -21,16 +27,9 @@ from selenium.webdriver.support.ui              import WebDriverWait
 from selenium.webdriver.remote.webelement       import WebElement
 from selenium.common.exceptions                 import NoAlertPresentException
 from selenium.common.exceptions                 import TimeoutException
-# from selenium.webdriver.remote.webdriver        import WebDriver
-# from selenium.common                            import exceptions as EX
-# from selenium.common.exceptions                 import NoSuchElementException
-
-################################################################################
-# Module Variables
-
-################################################################################
-# Module Classes
-
+from selenium.webdriver.remote.webdriver        import WebDriver
+from selenium.common                            import exceptions as EX
+from selenium.common.exceptions                 import NoSuchElementException
 
 class Object(object):
     pass
@@ -85,6 +84,10 @@ class Driver(object):
             return False
 
     def find(self, locator_string, container=None, wait=3):
+        '''Given a locator in the form of "type=value", 
+        an optional container within which to start a nested search,
+        and an optional wait time between attempts,
+        locate the elements and return a list of results.'''
         if not container:
             container = self.browser
         loc_type, loc_value = self.convert_locator(locator_string)
@@ -95,8 +98,8 @@ class Driver(object):
                         EC.presence_of_element_located((loc_type, loc_value))
                     )
                     element_list = container.find_elements(by=loc_type, value=loc_value)
-            if len(element_list) == 1:
-                element_list = element_list[0]
+            #if len(element_list) == 1:
+            #    element_list = element_list[0]
         except TimeoutException:
             element_list = []
         return element_list
@@ -141,7 +144,23 @@ class Driver(object):
                         ]
         return field_value
 
-    def open(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
+    def open_local_ff(self, url=None, profile=None):
+        if profile:
+            profile = WD.FirefoxProfile(profile)
+            self.browser = WD.Firefox(profile)
+        else:
+            self.browser = WD.Firefox()
+        self.close = self.browser.quit
+        if url:
+            self.goto(url)
+
+    def open_local_gc(self, url=None):
+        self.browser = WD.Chrome()
+        self.close = self.browser.quit
+        if url:
+            self.goto(url)
+
+    def open_remote_browser(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
         browsers = {
             #local driver name, remote driver capabilities
             'ff': ( 'Firefox', 'FIREFOX'),

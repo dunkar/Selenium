@@ -87,7 +87,8 @@ class Driver(object):
         '''Given a locator in the form of "type=value", 
         an optional container within which to start a nested search,
         and an optional wait time between attempts,
-        locate the elements and return a list of results.'''
+        locate the elements and return a list of results.
+        NOTE: If the search returns a single result, that result is returned from the method as a WebElement.'''
         if not container:
             container = self.browser
         loc_type, loc_value = self.convert_locator(locator_string)
@@ -98,8 +99,8 @@ class Driver(object):
                         EC.presence_of_element_located((loc_type, loc_value))
                     )
                     element_list = container.find_elements(by=loc_type, value=loc_value)
-            #if len(element_list) == 1:
-            #    element_list = element_list[0]
+            if len(element_list) == 1:
+                element_list = element_list[0]
         except TimeoutException:
             element_list = []
         return element_list

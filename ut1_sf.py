@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # Unit test script for the Selenium Framework module.
 
 import re

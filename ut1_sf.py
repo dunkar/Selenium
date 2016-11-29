@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Unit test script for the Allstate Selenium Framework module.
+# Unit test script for the Selenium Framework module.
 
 import re
 import unittest

@@ -84,7 +84,7 @@ class Driver(object):
             return False
 
     def find(self, locator_string, container=None, wait=3):
-        '''Given a locator in the form of "type=value", 
+        '''Given a locator in the form of "type=value",
         an optional container within which to start a nested search,
         and an optional wait time between attempts,
         locate the elements and return a list of results.
@@ -161,7 +161,7 @@ class Driver(object):
         if url:
             self.goto(url)
 
-    def open_remote_browser(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
+    def open(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
         browsers = {
             #local driver name, remote driver capabilities
             'ff': ( 'Firefox', 'FIREFOX'),

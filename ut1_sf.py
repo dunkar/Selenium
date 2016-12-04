@@ -13,13 +13,13 @@ class TestPlan001WithOutBrowser(unittest.TestCase):
 
     def tearDown(self):
         pass
-    
+
     def test_001_date_time_functions(self):
         d = self.driver
         current_date = d.get_date()
         date_match = re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', current_date)
         self.assertTrue(date_match is not None)
-        
+
         current_time = d.get_time()
         time_match = re.search('^[0-9]{2}:[0-9]{2}:[0-9]{2}$', current_time)
         self.assertTrue(time_match is not None)
@@ -35,13 +35,13 @@ class TestPlan002WithBrowser(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
         self.driver.open(
-            browser_name=config.browser_name, 
-            selenium_hub=config.selenium_hub, 
+            browser_name=config.browser_name,
+            selenium_hub=config.selenium_hub,
             selenium_port=config.selenium_port
             )
         self.driver.set_window(config.browser_size, config.browser_position)
         self.driver.goto(config.test_page)
-        
+
     def tearDown(self):
         self.driver.close()
 
@@ -64,15 +64,15 @@ class TestPlan002WithBrowser(unittest.TestCase):
         # Multiple Elements By Tag Name
         element_list = d.find('tag=input')
         self.assertTrue(
-            isinstance(element_list, list) and 
+            isinstance(element_list, list) and
             len(element_list) > 1 and
-            isinstance(element_list[0], d.WebElement)            
+            isinstance(element_list[0], d.WebElement)
             )
 
         # Invalid ID
         element_list = d.find('id=alskdjflkajsldkfjlaksdf')
         self.assertTrue(
-            isinstance(element_list, list) and 
+            isinstance(element_list, list) and
             len(element_list) == 0
             )
 
@@ -81,8 +81,8 @@ class TestPlan002WithBrowser(unittest.TestCase):
 
         clickable_element = d.find('id=text01')
         self.assertTrue(d.is_element_clickable(clickable_element))
-        
-        hidden_element = d.find('id=hidden2')
+
+        hidden_element = d.find('id=hidden1')
         self.assertFalse(d.is_element_clickable(hidden_element))
 
         hidden_element = d.wait_until_element_clickable('id=hidden3')
@@ -99,7 +99,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
 
         # Set text field
         d.set_field(field_element, 'Test123')
-        field_value = d.is_field_set(field_element) 
+        field_value = d.is_field_set(field_element)
         self.assertTrue(field_value == 'Test123')
 
         # Append to text field
@@ -127,7 +127,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
 
         # Set select field
         d.set_field(field_element, [1, 3, 4])
-        field_value = d.is_field_set(field_element) 
+        field_value = d.is_field_set(field_element)
         self.assertTrue(field_value == ['1', '3', '4'])
 
         # Add values to select field
@@ -137,7 +137,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
 
         # Change select field value
         d.set_field(field_element, [2, 5])
-        field_value = d.is_field_set(field_element) 
+        field_value = d.is_field_set(field_element)
         self.assertTrue(field_value == ['2', '5'])
 
         # Clear select field
@@ -254,7 +254,7 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
 #     self.assertTrue(False)
 #
 #  ############################################################################
-    
+
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')

@@ -7,7 +7,7 @@ import SeleniumFramework as sf
 import config
 
 
-class TestPlan001WithOutBrowser(unittest.TestCase):
+class TestPlan001UtilityFunctions(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
 
@@ -15,6 +15,8 @@ class TestPlan001WithOutBrowser(unittest.TestCase):
         pass
 
     def test_001_date_time_functions(self):
+        print('\n\nStarting test plan 001 - Utility functions:', end='')
+        print('\nStarting test case 001 - Date and time functions: ', end='')
         d = self.driver
         current_date = d.get_date()
         date_match = re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', current_date)
@@ -25,13 +27,14 @@ class TestPlan001WithOutBrowser(unittest.TestCase):
         self.assertTrue(time_match is not None)
 
     def test_002_make_valid_name(self):
+        print('\nStarting test case 002 - Make valid name function: ', end='')
         d = self.driver
         test_string = '    Now-is the (time)    '
         result_string = d.make_valid_name(test_string)
         self.assertTrue(result_string == 'Now_is_the_time')
 
 
-class TestPlan002WithBrowser(unittest.TestCase):
+class TestPlan002BasicBrowser(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
         self.driver.open(
@@ -46,10 +49,13 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.driver.close()
 
     def test_001_open_and_close_test_page(self):
+        print('\n\nStarting test plan 002 - Basic browser functions.', end='')
+        print('\nStarting test case 001 - Open and close test page functions: ', end='')
         d = self.driver
         self.assertTrue(d.browser.title == 'Test Page')
 
     def test_002_find_elements(self):
+        print('\nStarting test case 002 - Find element functions: ', end='')
         d = self.driver
 
         # Single Element By ID
@@ -77,6 +83,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
             )
 
     def test_003_is_element_clickable(self):
+        print('\nStarting test case 003 - Is element clickable functions: ', end='')
         d = self.driver
 
         clickable_element = d.find('id=text01')
@@ -90,6 +97,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.assertTrue(isinstance(hidden_element, d.WebElement))
 
     def test_004_text_fields(self):
+        print('\nStarting test case 004 - Text field functions: ', end='')
         d = self.driver
         field_element = d.find('id=text01')
 
@@ -118,6 +126,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.assertTrue(field_value == '')
 
     def test_005_select_fields(self):
+        print('\nStarting test case 005 - Select field functions: ', end='')
         d = self.driver
         field_element = d.find('id=select02')
 
@@ -146,6 +155,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.assertTrue(field_value == [])
 
     def test_006_text_area(self):
+        print('\nStarting test case 006 - Text area functions: ', end='')
         d = self.driver
         field_element = d.find('id=textarea01')
 
@@ -174,6 +184,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.assertTrue(field_value == '')
 
     def test_007_checkbox(self):
+        print('\nStarting test case 007 - Checkbox functions: ', end='')
         d = self.driver
         field_locator = 'id=chbox01'
         field_element = d.find(field_locator)
@@ -193,6 +204,7 @@ class TestPlan002WithBrowser(unittest.TestCase):
         self.assertFalse(field_value)
 
     def test_008_radio_buttons(self):
+        print('\nStarting test case 008 - Radio button functions: ', end='')
         d = self.driver
         field_locator = 'name=radio'
         field_element = d.find(field_locator)
@@ -222,6 +234,8 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
         self.driver.close()
 
     def test_001_double_click_and_alert(self):
+        print('\n\nStarting test plan 003 - Advanced features functions.', end='')
+        print('\nStarting test case 001 - Double-click functions: ', end='')
         d = self.driver
         field_locator = 'id=text01'
         field_element = d.find(field_locator)
@@ -230,6 +244,7 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
         self.assertTrue(alert_text == 'Double-click event')
 
     def test_002_right_click_and_alert(self):
+        print('\nStarting test case 002 - Right-click functions: ', end='')
         d = self.driver
         field_locator = 'id=chbox01'
         field_element = d.find(field_locator)

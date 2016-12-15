@@ -4,11 +4,11 @@
 ################################################################################
 # Selenium Framework
 __title__ = 'Selenium Framework'
-__version__ = '0.3.1'
+__version__ = '0.3.2'
 __license__ = 'MIT'
 __copyright__ = '2011 - 2016'
 __author__ = 'John Dahl'
-__date__ = '2016-11-23'
+__date__ = '2016-12-14'
 ################################################################################
 
 import os
@@ -220,14 +220,13 @@ class Driver(object):
             webelement.click()
         elif field_tag == 'select':
             select_element = Select(webelement)
-            if not append:
-                select_element.deselect_all()
-            if isinstance(field_value, list):
-                [select_element.select_by_visible_text(str(item))
-                    for item in field_value
-                    ]
-            elif isinstance(field_value, str):
+            if isinstance(field_value, str):
                 select_element.select_by_visible_text(field_value)
+            elif isinstance(field_value, list):
+                if (len(field_value) > 1 and not append) or len(field_value) == 0:
+                    select_element.deselect_all()
+                for item in field_value:
+                    select_element.select_by_visible_text(str(item))
 
     def set_window(self, window_size, window_position):
         self.browser.set_window_size(window_size[0], window_size[1])

@@ -54,6 +54,9 @@ assert(
 clickable_element = d.find('id=text01')
 assert(d.is_element_clickable(clickable_element))
 
+clickable_element = d.find('id=out_of_view')
+assert(d.is_element_clickable(clickable_element))
+
 hidden_element = d.find('id=hidden1')
 assert(not d.is_element_clickable(hidden_element))
 

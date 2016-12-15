@@ -19,16 +19,6 @@
                 left            : 2000px;
             }
         </style>
-        <script type="text/javascript">
-            document.addEventListener(
-                'contextmenu',
-                function(e) {
-                  alert('Right-click event'); //here you draw your own menu
-                  e.preventDefault();
-                },
-                false
-                );
-        </script>
     </head>
     <body>
         <table><tr><th>
@@ -78,11 +68,19 @@
             setTimeout(
                 'document.getElementById("hidden2").style.display="inline";',
                 3000
-                )
+            );
             setTimeout(
                 'document.getElementById("hidden3").style.display="inline";',
                 5000
-                )
+            );
+            document.addEventListener(
+                'contextmenu',
+                function(e) {
+                  alert('Right-click event'); //here you draw your own menu
+                  e.preventDefault();
+                },
+                false
+            );
         </script>
     </body>
 </html>

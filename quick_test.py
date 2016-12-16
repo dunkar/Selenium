@@ -138,6 +138,14 @@ field_element[2].click()
 field_value = d.is_radio_button_group_set(field_element)
 assert(field_value == ['Value 2'])
 
+field_element = d.find('id=radio01')
+field_value = d.is_field_set(field_element)
+assert(field_value == False)
+
+field_element = d.find('id=radio02')
+field_value = d.is_field_set(field_element)
+assert(field_value == True)
+
 # Check select fields:
 field_element = d.find('id=select01')   # Single Select
 

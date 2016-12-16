@@ -32,12 +32,17 @@ from selenium.common                            import exceptions as EX
 from selenium.common.exceptions                 import NoSuchElementException
 
 class Object(object):
+    '''Generic object constructor'''
     pass
 
 class FrameworkException(Exception):
+    '''Framework exception for deliberately thrown exceptions.'''
     pass
 
 class Driver(object):
+    '''
+    Main framework object. Everything runs from an instance of this object.
+    '''
     def __init__(self):
         self.WebElement = WebElement
         self.Select = Select
@@ -47,6 +52,10 @@ class Driver(object):
     # Browser-dependent Methods
     ############################################################################
     def check_alert(self, accept_alert=True):
+        '''Given that this method is called when a browser alert is present,
+        retrieve the message in the alert,
+        take the action requested (accept by default), and
+        return the message.'''
         try:
             alert = self.browser.switch_to.alert
             alert_text = alert.text
@@ -59,10 +68,12 @@ class Driver(object):
             return False
 
     def control_click(self, webelement, container=None):
+        '''Given a web element,
+        perform a control-click on the element and
+        return a boolean confirmation of the success of the action.'''
         if container is None:
             container = self.browser
         try:
-            #AC(container).key_down(Keys.CONTROL).click(webelement).key_up(Keys.CONTROL).perform()
             AC(container)\
                 .context_click(webelement)\
                 .send_keys(Keys.ARROW_DOWN)\
@@ -74,6 +85,9 @@ class Driver(object):
             return False
 
     def double_click(self, webelement, container=None):
+        '''Given a web element,
+        perform a double-click on the element and
+        return a boolean confirmation of the success of the action.'''
         if container is None:
             container = self.browser
         try:
@@ -86,9 +100,12 @@ class Driver(object):
     def find(self, locator_string, container=None, wait=3):
         '''Given a locator in the form of "type=value",
         an optional container within which to start a nested search,
-        and an optional wait time between attempts,
+        and an optional wait time,
         locate the elements and return a list of results.
-        NOTE: If the search returns a single result, that result is returned from the method as a WebElement.'''
+        If a result is not found, a second attempt will be made after
+        the wait time.
+        If the search returns a single result, that result is returned
+        from the method as a WebElement.'''
         if not container:
             container = self.browser
         loc_type, loc_value = self.convert_locator(locator_string)
@@ -110,6 +127,7 @@ class Driver(object):
         self.browser.get(url)
 
     def is_element_clickable(self, webelement):
+        '''Given a web element, determine if it is eligable to click on it.'''
         #if not isinstance(webelement, self.WebElement):
         #    return False
         if (webelement.is_displayed() and
@@ -122,13 +140,16 @@ class Driver(object):
             return False
 
     def is_field_set(self, webelement):
+        '''Given a web element representing a form field,
+        determine if the field has a value set, and if so,
+        return the value or None.'''
         try:
             field_tag = webelement.tag_name
             field_type = webelement.get_attribute('type') or None
             if field_tag == 'select':
                 field_value_list = Select(webelement).all_selected_options
                 field_value = [f.text for f in field_value_list]
-            elif field_tag == 'input' and field_type == 'checkbox':
+            elif field_tag == 'input' and field_type in ['checkbox', 'radio']:
                 field_value = webelement.is_selected()
             elif field_tag in [ 'input', 'textarea' ]:
                 field_value = webelement.get_attribute('value')

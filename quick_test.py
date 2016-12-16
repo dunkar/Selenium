@@ -134,6 +134,10 @@ field_element[1].click()
 field_value = d.is_radio_button_group_set(field_element)
 assert(field_value == ['Value 1'])
 
+field_element[2].click()
+field_value = d.is_radio_button_group_set(field_element)
+assert(field_value == ['Value 2'])
+
 # Check select fields:
 field_element = d.find('id=select01')   # Single Select
 
@@ -170,14 +174,12 @@ field_value = d.is_field_set(field_element)
 assert(field_value == [])
 
 # Check Advanced Functions:
-field_locator = 'id=text01'
-field_element = d.find(field_locator)
+field_element = d.find('id=text01')
 assert(d.double_click(field_element))
 alert_text = d.check_alert()
 assert(alert_text == 'Double-click event')
 
-field_locator = 'id=chbox01'
-field_element = d.find(field_locator)
+field_element = d.find('id=chbox01')
 assert(d.right_click(field_element))
 alert_text = d.check_alert()
 assert(alert_text == 'Right-click event')

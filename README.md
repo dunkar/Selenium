@@ -13,7 +13,7 @@ basic capabilities that are most frequently used (in my experience anyway).
 ```
 import SeleniumFramework as SF
 d = SF.Driver()
-d.open('gc') # Can be gc, ff, ie, hu
+d.open('gc') # Can be gc, ff, ie
 d.goto('https://duckduckgo.com/')
 el = d.find('name=q')
 el.send_keys('SeleniumHQ')

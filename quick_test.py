@@ -14,20 +14,24 @@ d = sf.Driver()
 current_date = d.get_date()
 date_match = re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', current_date)
 assert(date_match is not None)
+print(f'The current date is: {current_date}')
 
 current_time = d.get_time()
 time_match = re.search('^[0-9]{2}:[0-9]{2}:[0-9]{2}$', current_time)
 assert(time_match is not None)
+print(f'The current time is: {current_time}')
 
 test_string = '    Now-is the (time)    '
 result_string = d.make_valid_name(test_string)
 assert(result_string == 'Now_is_the_time')
+print(f'The valid name is: {result_string}')
 
 # Open a browser window and navigate to the test page
 d.open(browser_name)
 d.set_window((1024, 768), (50, 20))
 d.goto(test_page)
 assert(d.browser.title == 'Test Page')
+print(f'The page title is: {d.browser.title}')
 
 # Find elements:
 element_list = d.find('id=text01')

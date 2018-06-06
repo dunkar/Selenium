@@ -8,4 +8,16 @@ basic capabilities that are most frequently used (in my experience anyway).
 - Install the selenium bindings for Python: `pip install selenium`
 - Install the SeleniumFramework.py file into a location searchable by Python
     - i.e. site-packages or the folder containing your test scripts
-- In your test script: `import SeleniumFramework`
+- Sample test script:
+
+```
+import SeleniumFramework as SF
+d = SF.Driver()
+d.open('gc') # Can be gc, ff, ie, hu
+d.goto('https://duckduckgo.com/')
+el = d.find('name=q')
+el.send_keys('SeleniumHQ')
+el.submit()
+assert d.browser.title == 'SeleniumHQ at DuckDuckGo'
+d.close()
+```

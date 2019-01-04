@@ -9,15 +9,23 @@ basic capabilities that are most frequently used (in my experience anyway).
 - Install the SeleniumFramework.py file into a location searchable by Python
     - i.e. site-packages or the folder containing your test scripts
 - Sample test script:
-
 ```
+# Inputs and variables:
+browser          = 'gc'                        # Can be gc, ff, ie.
+test_url         = 'https://duckduckgo.com/'   # Starting URL.
+identifier_type  = 'name'                      # Can be any css identifier like id, tag, name, etc.
+identifier_value = 'q'                         # Value associated with the identifier listed above.
+search_string    = 'SeleniumHQ'                # Test criteria
+
+# Execute steps:
 import SeleniumFramework as SF
-d = SF.Driver()
-d.open('gc') # Can be gc, ff, ie
-d.goto('https://duckduckgo.com/')
-el = d.find('name=q')
-el.send_keys('SeleniumHQ')
-el.submit()
-assert d.browser.title == 'SeleniumHQ at DuckDuckGo'
-d.close()
+driver = SF.Driver()
+driver.open(browser) 
+driver.goto(test_url)
+element = driver.find(f'{identifier_type}={identifier_value}') 
+    # By default, the driver.find method tries two times with a 3-second delay between attempts.
+element.send_keys(search_string)
+element.submit()
+assert driver.browser.title == f'{search_string} at DuckDuckGo'
+driver.close()
 ```

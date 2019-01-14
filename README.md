@@ -10,22 +10,16 @@ basic capabilities that are most frequently used (in my experience anyway).
     - i.e. site-packages or the folder containing your test scripts
 - Sample test script:
 ```
-# Inputs and variables:
-browser          = 'gc'                        # Can be gc, ff, ie.
-test_url         = 'https://duckduckgo.com/'   # Starting URL.
-identifier_type  = 'name'                      # Can be any css identifier like id, tag, name, etc.
-identifier_value = 'q'                         # Value associated with the identifier listed above.
-search_string    = 'SeleniumHQ'                # Test criteria
-
-# Execute steps:
 import SeleniumFramework as SF
+
 driver = SF.Driver()
-driver.open(browser) 
-driver.goto(test_url)
-element = driver.find(f'{identifier_type}={identifier_value}') 
-    # By default, the driver.find method tries two times with a 3-second delay between attempts.
-element.send_keys(search_string)
+driver.open('gc')   # Can be gc, ff, ie.
+driver.goto('https://duckduckgo.com/')
+
+element = driver.find('name=q') 
+element.send_keys('SeleniumHQ')
 element.submit()
-assert driver.browser.title == f'{search_string} at DuckDuckGo'
+
+assert driver.browser.title == 'SeleniumHQ at DuckDuckGo'
 driver.close()
 ```

@@ -10,9 +10,9 @@ basic capabilities that are most frequently used (in my experience anyway).
     - i.e. site-packages or the folder containing your test scripts
 - Sample test script:
 ```
-import SeleniumFramework as SF
+import SeleniumFramework as sf
 
-driver = SF.Driver()
+driver = sf.Driver()
 driver.open('gc')   # Can be gc, ff, ie.
 driver.goto('https://duckduckgo.com/')
 

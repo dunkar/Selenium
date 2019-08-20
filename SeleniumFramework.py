@@ -4,11 +4,31 @@
 ################################################################################
 # Selenium Framework
 __title__ = 'Selenium Framework'
-__version__ = '0.3.3'
-__license__ = 'MIT'
-__copyright__ = '2011 - 2016'
+__version__ = '0.3.4'
+__copyright__ = '2011 - 2019'
 __author__ = 'John Dahl'
-__date__ = '2016-12-17'
+__date__ = '2019-08-20'
+__license__ = '''MIT License
+
+Copyright (c) 2011-2019 John Dahl
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.'''
 ################################################################################
 
 import os
@@ -160,6 +180,9 @@ class Driver(object):
         return field_value
 
     def is_radio_button_group_set(self, button_group):
+        '''Given a web element representing a radio button group,
+        determine if the field has a value set, and if so,
+        return the value or None.'''
         field_value = [ button.get_attribute('value')
                         for button in button_group
                         if button.is_selected()
@@ -167,6 +190,8 @@ class Driver(object):
         return field_value
 
     def open_local_ff(self, url=None, profile=None):
+        '''Open a local instance of Mozilla Firefox and
+        set the close method'''
         if profile:
             profile = WD.FirefoxProfile(profile)
             self.browser = WD.Firefox(profile)
@@ -177,12 +202,16 @@ class Driver(object):
             self.goto(url)
 
     def open_local_gc(self, url=None):
+        '''Open a local instance of Google Chrome and
+        set the close method'''
         self.browser = WD.Chrome()
         self.close = self.browser.quit
         if url:
             self.goto(url)
 
     def open(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
+        '''Open a new instance of the selected browser and
+        set the close method'''
         browsers = {
             #local driver name, remote driver capabilities
             'ff': ( 'Firefox', 'FIREFOX'),
@@ -213,6 +242,7 @@ class Driver(object):
             self.close      = self.browser.close
 
     def right_click(self, webelement, container=None):
+        '''Given a web element, right-click on it.'''
         if container is None:
             container = self.browser
         try:
@@ -223,10 +253,13 @@ class Driver(object):
             return False
 
     def scroll_into_view(self, webelement):
+        '''Given a web element on the current page, 
+        scroll the page until the element is visible.'''
         self.browser.execute_script("arguments[0].scrollIntoView(true);", webelement)
         self.wait(.5)
 
     def set_field(self, webelement, field_value, append=False):
+        '''Given a form field, set the value of the field.'''
         field_tag = webelement.tag_name
         if field_tag == 'textarea' or \
             (field_tag == 'input' and \
@@ -250,10 +283,12 @@ class Driver(object):
                     select_element.select_by_visible_text(str(item))
 
     def set_window(self, window_size, window_position):
+        '''Set the browser window size and position.'''
         self.browser.set_window_size(window_size[0], window_size[1])
         self.browser.set_window_position(window_position[0], window_position[1])
 
     def switch_to(self, locator_string=None, container=None):
+        '''Change the browser context to a different window or frame.'''
         if container is None:
             container = self.browser
         if locator_string is not None:
@@ -270,6 +305,7 @@ class Driver(object):
             raise 'Invalid switch-to target'
 
     def wait_until_element_clickable(self, locator_string=None, timeout=30):
+        '''Wait until the condition exists when the element is clickable or timeout.'''
         locator_object = self.convert_locator(locator_string)
         webelement = WebDriverWait(self.browser, timeout).until(
             EC.element_to_be_clickable(locator_object)

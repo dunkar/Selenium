@@ -4,13 +4,13 @@
 ################################################################################
 # Selenium Framework
 __title__ = 'Selenium Framework'
-__version__ = '0.3.4'
-__copyright__ = '2011 - 2019'
+__version__ = '0.4.0'
+__copyright__ = '2011 - 2020'
 __author__ = 'John Dahl'
-__date__ = '2019-08-20'
+__date__ = '2020-01-17'
 __license__ = '''MIT License
 
-Copyright (c) 2011-2019 John Dahl
+Copyright (c) 2011-2020 John Dahl
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -370,4 +370,4 @@ if __name__ == '__main__':
            as a script.')
     print('Add the following line to your scripts or type this in your \
            Python session:')
-    print('\timport SeleniumFramework as sf')
+    print('\timport selenium_framework as sf')

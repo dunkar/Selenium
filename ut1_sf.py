@@ -3,7 +3,7 @@
 
 import re
 import unittest
-import SeleniumFramework as sf
+import selenium_framework as sf
 import config
 
 

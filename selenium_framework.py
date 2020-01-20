@@ -86,6 +86,8 @@ class Driver(object):
             return alert_text
         except NoAlertPresentException:
             return False
+        except:
+            self.throw(f'Unable to check the alert.')
 
     def control_click(self, webelement, container=None):
         '''Given a web element,
@@ -218,6 +220,7 @@ class Driver(object):
             'gc': ( 'Chrome' , 'CHROME'),
             'hu': ( None     , 'HTMLUNITWITHJS'),
             'ie': ( 'Ie'     , 'INTERNETEXPLORER'),
+            'js': ( 'PhantomJS', 'PHANTOMJS'),
         }
         local_driver, remote_driver = browsers[browser_name]
 
@@ -289,20 +292,23 @@ class Driver(object):
 
     def switch_to(self, locator_string=None, container=None):
         '''Change the browser context to a different window or frame.'''
-        if container is None:
-            container = self.browser
-        if locator_string is not None:
-            locator_type, locator_value = self.convert_locator(locator_string)
-        else:
-            locator_type = None
-        if locator_type in [None, '', 'top', 'default']:
-            self.browser.switch_to.default_content()
-        elif locator_type == 'window':
-            container.switch_to.window(locator_value)
-        elif locator_type == 'frame':
-            container.switch_to.frame(locator_value)
-        else:
-            raise 'Invalid switch-to target'
+        try:
+            if container is None:
+                container = self.browser
+            if locator_string is not None:
+                locator_type, locator_value = self.convert_locator(locator_string)
+            else:
+                locator_type = None
+            if locator_type in [None, '', 'top', 'default']:
+                self.browser.switch_to.default_content()
+            elif locator_type == 'window':
+                container.switch_to.window(locator_value)
+            elif locator_type == 'frame':
+                container.switch_to.frame(locator_value)
+            else:
+                self.throw(f'Invalid switch-to target: {locator_string}')
+        except:
+            self.throw(f'Unable to swtich to the target: {locator_string}')
 
     def wait_until_element_clickable(self, locator_string=None, timeout=30):
         '''Wait until the condition exists when the element is clickable or timeout.'''

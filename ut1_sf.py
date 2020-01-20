@@ -4,8 +4,28 @@
 import re
 import unittest
 import selenium_framework as sf
-import config
 
+#######################################################################
+# Config
+
+browser_name = 'ff' # Valid options: ff, gc, js, ie
+browser_options = {
+    'headless': True,
+    'size': (800, 600),
+    'position': (0,0)
+}
+browser_profile = None
+selenium_hub = 'local'
+selenium_port = '4444'
+test_page = f'https://data.jnkdahl.com/index.html'
+
+#######################################################################
+
+def intro_plan(title):
+    print(f'\n\n{"-" * 80}\n{title}\n{"-" * 80}', end='')
+
+def intro_test(title):
+    print(f'\n\t{title} '.ljust(65, '_'), end='')
 
 class TestPlan001UtilityFunctions(unittest.TestCase):
     def setUp(self):
@@ -15,8 +35,9 @@ class TestPlan001UtilityFunctions(unittest.TestCase):
         pass
 
     def test_001_date_time_functions(self):
-        print('\n\nStarting test plan 001 - Utility functions:', end='')
-        print('\nStarting test case 001 - Date and time functions: ', end='')
+
+        intro_plan('Starting test plan 001 - Utility functions')
+        intro_test('Test case 001 - Date and time functions')
         d = self.driver
         current_date = d.get_date()
         date_match = re.search('^[0-9]{4}-[0-9]{2}-[0-9]{2}$', current_date)
@@ -27,7 +48,7 @@ class TestPlan001UtilityFunctions(unittest.TestCase):
         self.assertTrue(time_match is not None)
 
     def test_002_make_valid_name(self):
-        print('\nStarting test case 002 - Make valid name function: ', end='')
+        intro_test('Test case 002 - Make valid name function')
         d = self.driver
         test_string = '    Now-is the (time)    '
         result_string = d.make_valid_name(test_string)
@@ -38,24 +59,24 @@ class TestPlan002BasicBrowser(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
         self.driver.open(
-            browser_name=config.browser_name,
-            selenium_hub=config.selenium_hub,
-            selenium_port=config.selenium_port
+            browser_name=browser_name,
+            selenium_hub=selenium_hub,
+            selenium_port=selenium_port
             )
-        self.driver.set_window(config.browser_size, config.browser_position)
-        self.driver.goto(config.test_page)
+        # self.driver.set_window(browser_options['size'], browser_options['position'])
+        self.driver.goto(test_page)
 
     def tearDown(self):
         self.driver.close()
 
     def test_001_open_and_close_test_page(self):
-        print('\n\nStarting test plan 002 - Basic browser functions.', end='')
-        print('\nStarting test case 001 - Open and close test page functions: ', end='')
+        intro_plan('Starting test plan 002 - Basic browser functions')
+        intro_test('Test case 001 - Open and close test page functions')
         d = self.driver
         self.assertTrue(d.browser.title == 'Test Page')
 
     def test_002_find_elements(self):
-        print('\nStarting test case 002 - Find element functions: ', end='')
+        intro_test('Test case 002 - Find element functions')
         d = self.driver
 
         # Single Element By ID
@@ -83,7 +104,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
             )
 
     def test_003_is_element_clickable(self):
-        print('\nStarting test case 003 - Is element clickable functions: ', end='')
+        intro_test('Test case 003 - Is element clickable functions')
         d = self.driver
 
         clickable_element = d.find('id=text01')
@@ -97,13 +118,13 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertTrue(isinstance(hidden_element, d.WebElement))
 
     def test_004_text_fields(self):
-        print('\nStarting test case 004 - Text field functions: ', end='')
+        intro_test('Test case 004 - Text field functions')
         d = self.driver
         field_element = d.find('id=text01')
 
-        # Is field empty
+        # Check initial value
         field_value = d.is_field_set(field_element)
-        self.assertFalse(field_value)
+        self.assertEqual(field_value, 'Double-click me')
 
         # Set text field
         d.set_field(field_element, 'Test123')
@@ -126,7 +147,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertTrue(field_value == '')
 
     def test_005_select_fields(self):
-        print('\nStarting test case 005 - Select field functions: ', end='')
+        intro_test('Test case 005 - Select field functions')
         d = self.driver
         field_element = d.find('id=select02')
 
@@ -155,13 +176,13 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertTrue(field_value == [])
 
     def test_006_text_area(self):
-        print('\nStarting test case 006 - Text area functions: ', end='')
+        intro_test('Test case 006 - Text area functions')
         d = self.driver
         field_element = d.find('id=textarea01')
 
-        # Is field empty
+        # Check initial value
         field_value = d.is_field_set(field_element)
-        self.assertFalse(field_value)
+        self.assertEqual(field_value, 'Right-click me')
 
         # Set text field
         d.set_field(field_element, 'Test123')
@@ -184,7 +205,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertTrue(field_value == '')
 
     def test_007_checkbox(self):
-        print('\nStarting test case 007 - Checkbox functions: ', end='')
+        intro_test('Test case 007 - Checkbox functions')
         d = self.driver
         field_locator = 'id=chbox01'
         field_element = d.find(field_locator)
@@ -204,7 +225,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertFalse(field_value)
 
     def test_008_radio_buttons(self):
-        print('\nStarting test case 008 - Radio button functions: ', end='')
+        intro_test('Test case 008 - Radio button functions')
         d = self.driver
         field_locator = 'name=radio'
         field_element = d.find(field_locator)
@@ -223,19 +244,21 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
         self.driver.open(
-            browser_name=config.browser_name,
-            selenium_hub=config.selenium_hub,
-            selenium_port=config.selenium_port
+            browser_name=browser_name,
+            selenium_hub=selenium_hub,
+            selenium_port=selenium_port
             )
-        self.driver.set_window(config.browser_size, config.browser_position)
-        self.driver.goto(config.test_page)
+        # self.driver.set_window(browser_options['size'], browser_options['position'])
+        self.driver.goto(test_page)
 
     def tearDown(self):
         self.driver.close()
 
     def test_001_double_click_and_alert(self):
-        print('\n\nStarting test plan 003 - Advanced features functions.', end='')
-        print('\nStarting test case 001 - Double-click functions: ', end='')
+        intro_plan('Starting test plan 003 - Advanced features functions')
+        intro_test('Test case 001 - Double-click functions')
+        # if config.browser_name == 'js':
+        #     raise Exception('Skipping popup test in a headless browser.')
         d = self.driver
         field_locator = 'id=text01'
         field_element = d.find(field_locator)
@@ -244,9 +267,11 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
         self.assertTrue(alert_text == 'Double-click event')
 
     def test_002_right_click_and_alert(self):
-        print('\nStarting test case 002 - Right-click functions: ', end='')
+        intro_test('Test case 002 - Right-click functions')
+        # if config.browser_name == 'js':
+        #     raise Exception('Skipping popup test in a headless browser.')
         d = self.driver
-        field_locator = 'id=chbox01'
+        field_locator = 'id=textarea01'
         field_element = d.find(field_locator)
         self.assertTrue(d.right_click(field_element))
         alert_text = d.check_alert()

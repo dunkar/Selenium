@@ -6,14 +6,14 @@ basic capabilities that are most frequently used (in my experience anyway).
 # Instructions
 - Install Python version 3
 - Install the selenium bindings for Python: `pip install selenium`
-- Install the SeleniumFramework.py file into a location searchable by Python
+- Install the selenium_framework.py file into a location searchable by Python
     - i.e. site-packages or the folder containing your test scripts
 - Sample test script:
 ```
-import SeleniumFramework as sf
+import selenium_framework as sf
 
 driver = sf.Driver()
-driver.open('gc')   # Can be gc, ff, ie.
+driver.open('gc')   # Can be js, gc, ff, ie.
 driver.goto('https://duckduckgo.com/')
 
 element = driver.find('name=q') 

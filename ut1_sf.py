@@ -2,13 +2,15 @@
 # Unit test script for the Selenium Framework module.
 
 import re
+import os
 import unittest
 import selenium_framework as sf
+
 
 #######################################################################
 # Config
 
-browser_name = 'ff' # Valid options: ff, gc, js, ie
+browser_name = 'gc' # Valid options: ff, gc, js, ie
 browser_options = {
     'headless': True,
     'size': (800, 600),
@@ -17,7 +19,7 @@ browser_options = {
 browser_profile = None
 selenium_hub = 'local'
 selenium_port = '4444'
-test_page = f'https://data.jnkdahl.com/index.html'
+test_page = f'file://{os.path.dirname(os.path.abspath(__file__))}/_sampleWebpage/test_page.html'
 
 #######################################################################
 

@@ -19,67 +19,75 @@
                 left            : 2000px;
             }
         </style>
+        <script type="text/javascript">
+        </script>
     </head>
     <body>
-        <table><tr><th>
-        <div id="title">Test Page</div>
-        </th></tr><tr><td>
-        Text: </td><td><input type="text" id="text01" ondblclick="alert('Double-click event');"/>
-        </td></tr><tr><td>
-          Textarea: </td><td><textarea id="textarea01"></textarea>
-          </td></tr><tr><td>
-          Checkbox: </td><td><input type="checkbox" id="chbox01"/>
-          </td></tr><tr><td>
-          Radio:</td><td>
-          <input type="radio" name="radio" id="radio00" style="Display:None"></input>
-          <input type="radio" name="radio" id="radio01" value="Value 1">Value 1</input><br/>
-          <input type="radio" name="radio" id="radio02" value="Value 2">Value 2</input><br/>
-          </td></tr><tr><td>
-          Select #1: </td><td><select id="select01">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-          </select>
-          </td></tr><tr><td>
-          Select #2: </td><td><select id="select02" multiple size="5">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-              <option>6</option>
-          </select>
-        </td></tr><tr><td>
-        <!--
-        Input 01: </td><td><input class="input01" name="input01" id="input01"/>
-        </td></tr><tr><td>
-        -->
-        Hidden Element #1: </td><td><input id="hidden1" style="display:none"
-            value="Not hidden" />
-        </td></tr><tr><td>
-        Hidden Element #2: </td><td><input id="hidden2" style="display:none"
-            value="Display after 3 seconds" />
-        </td></tr><tr><td>
-        Hidden Element #3: </td><td><input id="hidden3" style="display:none"
-            value="Display after 5 seconds" />
-        </td></tr><tr><td colspan="2">
-        <iframe id="iframe1" src="http://ipinfo.io/">Hello, World!</iframe>
-        </td></tr></table>
+        <table>
+            <tr>
+                <th><div id="title">Test Page</div></th>
+            </tr>
+            <tr>
+                <td>Text 01: </td><td><input type="text" id="text01" ondblclick="alert('Double-click event');" value="Double-click me"/></td>
+            </tr>
+            <tr>
+                <td>Textarea 01: </td><td><textarea id="textarea01">Right-click me</textarea></td>
+            </tr>
+            <!-- <tr>
+                <td>Input 01: </td><td><input class="input01" name="input01" id="input01"/></td>
+            </tr> -->
+            <tr>
+                <td>Hidden Element #1: </td><td><input id="hidden1" style="display:none" value="Not hidden" /></td>
+            </tr>
+            <tr>
+                <td>Hidden Element #2 (3 second delay): </td><td><input id="hidden2" style="display:none" value="Not hidden" /></td>
+            </tr>
+            <tr>
+                <td>Hidden Element #3 (5 second delay): </td><td><input id="hidden3" style="display:none" value="Not hidden" /></td>
+            </tr>
+            <tr>
+                <td>Checkbox 01: </td><td><input type="checkbox" id="chbox01"/></td>
+            </tr>
+            <tr>
+                <td>Radio:</td><td>
+                    <input type="radio" name="radio" id="radio00" style="Display:None"></input>
+                    <input type="radio" name="radio" id="radio01" value="Value 1">Value 1</input><br/>
+                    <input type="radio" name="radio" id="radio02" value="Value 2">Value 2</input><br/>
+                </td>
+            </tr>
+            <tr>
+                <td>Select 01 (Single-value): </td><td><select id="select01">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td>Select 02 (Multi-value): </td><td><select id="select02" multiple size="5">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option>6</option>
+                </select></td>
+            </tr>
+        </table>
         <div id="out_of_view" onclick="click_div(this);">This div is out of view.</div>
         <script>
             setTimeout(
                 'document.getElementById("hidden2").style.display="inline";',
                 3000
-            );
+                );
             setTimeout(
                 'document.getElementById("hidden3").style.display="inline";',
                 5000
-            );
-            document.addEventListener(
+                );
+            document.getElementById('textarea01').addEventListener(
                 'contextmenu',
                 function(e) {
-                  alert('Right-click event'); //here you draw your own menu
-                  e.preventDefault();
+                    alert('Right-click event'); //here you draw your own menu
+                    e.preventDefault();
                 },
                 false
             );

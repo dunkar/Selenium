@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
+'''
+A framework built around the Selenium WebDriver to simplify the basic capabilities that are
+most frequently used (in my experience anyway).
+'''
 ################################################################################
 # Selenium Framework
 __title__ = 'Selenium Framework'
@@ -31,7 +34,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.'''
 ################################################################################
 
-import os
+# import os
 import re
 import time
 
@@ -47,17 +50,17 @@ from selenium.webdriver.support.ui              import WebDriverWait
 from selenium.webdriver.remote.webelement       import WebElement
 from selenium.common.exceptions                 import NoAlertPresentException
 from selenium.common.exceptions                 import TimeoutException
-from selenium.webdriver.remote.webdriver        import WebDriver
-from selenium.common                            import exceptions as EX
-from selenium.common.exceptions                 import NoSuchElementException
+# from selenium.webdriver.remote.webdriver        import WebDriver
+# from selenium.common                            import exceptions as EX
+# from selenium.common.exceptions                 import NoSuchElementException
 
 class Object(object):
     '''Generic object constructor'''
-    pass
+    # pass
 
 class FrameworkException(Exception):
     '''Framework exception for deliberately thrown exceptions.'''
-    pass
+    # pass
 
 class Driver(object):
     '''
@@ -67,6 +70,8 @@ class Driver(object):
         self.WebElement = WebElement
         self.Select = Select
         self.Keys = Keys
+        self.browser = None
+        self.close = None
 
     ############################################################################
     # Browser-dependent Methods
@@ -86,7 +91,7 @@ class Driver(object):
             return alert_text
         except NoAlertPresentException:
             return False
-        except:
+        except Exception:
             self.throw(f'Unable to check the alert.')
 
     def control_click(self, webelement, container=None):
@@ -103,7 +108,7 @@ class Driver(object):
                 .perform()
             self.wait(.5)
             return True
-        except:
+        except Exception:
             return False
 
     def double_click(self, webelement, container=None):
@@ -116,7 +121,7 @@ class Driver(object):
             AC(container).double_click(webelement).perform()
             self.wait(.5)
             return True
-        except:
+        except Exception:
             return False
 
     def find(self, locator_string, container=None, wait=3):
@@ -134,10 +139,10 @@ class Driver(object):
         try:
             element_list = container.find_elements(by=loc_type, value=loc_value)
             if (not element_list and isinstance(wait, int) and wait > 0):
-                    WebDriverWait(self.browser, wait).until(
-                        EC.presence_of_element_located((loc_type, loc_value))
-                    )
-                    element_list = container.find_elements(by=loc_type, value=loc_value)
+                WebDriverWait(self.browser, wait).until(
+                    EC.presence_of_element_located((loc_type, loc_value))
+                )
+                element_list = container.find_elements(by=loc_type, value=loc_value)
             if len(element_list) == 1:
                 element_list = element_list[0]
         except TimeoutException:
@@ -153,10 +158,9 @@ class Driver(object):
         #if not isinstance(webelement, self.WebElement):
         #    return False
         if (webelement.is_displayed() and
-            webelement.is_enabled() and
-            webelement.size['width'] > 0 and
-            webelement.size['height'] > 0
-            ):
+                webelement.is_enabled() and
+                webelement.size['width'] > 0 and
+                webelement.size['height'] > 0):
             return True
         else:
             return False
@@ -173,11 +177,11 @@ class Driver(object):
                 field_value = [f.text for f in field_value_list]
             elif field_tag == 'input' and field_type in ['checkbox', 'radio']:
                 field_value = webelement.is_selected()
-            elif field_tag in [ 'input', 'textarea' ]:
+            elif field_tag in ['input', 'textarea']:
                 field_value = webelement.get_attribute('value')
             else:
                 field_value = None
-        except:
+        except Exception:
             field_value = None
         return field_value
 
@@ -185,10 +189,9 @@ class Driver(object):
         '''Given a web element representing a radio button group,
         determine if the field has a value set, and if so,
         return the value or None.'''
-        field_value = [ button.get_attribute('value')
-                        for button in button_group
-                        if button.is_selected()
-                        ]
+        field_value = [button.get_attribute('value')
+                       for button in button_group
+                       if button.is_selected()]
         return field_value
 
     def open_local_ff(self, url=None, profile=None):
@@ -216,11 +219,11 @@ class Driver(object):
         set the close method'''
         browsers = {
             #local driver name, remote driver capabilities
-            'ff': ( 'Firefox', 'FIREFOX'),
-            'gc': ( 'Chrome' , 'CHROME'),
-            'hu': ( None     , 'HTMLUNITWITHJS'),
-            'ie': ( 'Ie'     , 'INTERNETEXPLORER'),
-            'js': ( 'PhantomJS', 'PHANTOMJS'),
+            'ff': ('Firefox', 'FIREFOX'),
+            'gc': ('Chrome', 'CHROME'),
+            'hu': (None, 'HTMLUNITWITHJS'),
+            'ie': ('Ie', 'INTERNETEXPLORER'),
+            'js': ('PhantomJS', 'PHANTOMJS'),
         }
         local_driver, remote_driver = browsers[browser_name]
 
@@ -228,21 +231,20 @@ class Driver(object):
         if selenium_hub == 'local' and browser_name != 'hu':
             self.browser = getattr(WD, local_driver)()
         elif selenium_hub != 'local':
-            command_executor     = 'http://{0}:{1}/wd/hub'.format(selenium_hub, selenium_port)
+            command_executor = 'http://{0}:{1}/wd/hub'.format(selenium_hub, selenium_port)
             desired_capabilities = getattr(WD.DesiredCapabilities, remote_driver)
             self.browser = WD.Remote(
-                command_executor        = command_executor,
-                desired_capabilities    = desired_capabilities,
-                browser_profile         = None
-                )
+                command_executor=command_executor,
+                desired_capabilities=desired_capabilities,
+                browser_profile=None)
         else:
             raise 'Invalid browser selection.'
 
         # Setup the driver close method
         if selenium_hub == 'local' and browser_name == 'gc':
-            self.close      = self.browser.quit
+            self.close = self.browser.quit
         else:
-            self.close      = self.browser.close
+            self.close = self.browser.close
 
     def right_click(self, webelement, container=None):
         '''Given a web element, right-click on it.'''
@@ -252,11 +254,11 @@ class Driver(object):
             AC(container).context_click(webelement).perform()
             self.wait(.5)
             return True
-        except:
+        except Exception:
             return False
 
     def scroll_into_view(self, webelement):
-        '''Given a web element on the current page, 
+        '''Given a web element on the current page,
         scroll the page until the element is visible.'''
         self.browser.execute_script("arguments[0].scrollIntoView(true);", webelement)
         self.wait(.5)
@@ -265,14 +267,13 @@ class Driver(object):
         '''Given a form field, set the value of the field.'''
         field_tag = webelement.tag_name
         if field_tag == 'textarea' or \
-            (field_tag == 'input' and \
-            webelement.get_attribute('type') not in ['radio','checkbox']
-            ):
-                webelement.click()
-                if not append:
-                    webelement.clear()
-                webelement.send_keys(field_value)
-                #self.find('tag=body').click()
+            field_tag == 'input' and \
+            webelement.get_attribute('type') not in ['radio', 'checkbox']:
+            webelement.click()
+            if not append:
+                webelement.clear()
+            webelement.send_keys(field_value)
+            #self.find('tag=body').click()
         elif field_tag == 'input':
             webelement.click()
         elif field_tag == 'select':
@@ -280,7 +281,7 @@ class Driver(object):
             if isinstance(field_value, str):
                 select_element.select_by_visible_text(field_value)
             elif isinstance(field_value, list):
-                if (len(field_value) > 1 and not append) or len(field_value) == 0:
+                if (len(field_value) > 1 and not append) or not field_value:
                     select_element.deselect_all()
                 for item in field_value:
                     select_element.select_by_visible_text(str(item))
@@ -307,15 +308,14 @@ class Driver(object):
                 container.switch_to.frame(locator_value)
             else:
                 self.throw(f'Invalid switch-to target: {locator_string}')
-        except:
+        except Exception:
             self.throw(f'Unable to swtich to the target: {locator_string}')
 
     def wait_until_element_clickable(self, locator_string=None, timeout=30):
         '''Wait until the condition exists when the element is clickable or timeout.'''
         locator_object = self.convert_locator(locator_string)
         webelement = WebDriverWait(self.browser, timeout).until(
-            EC.element_to_be_clickable(locator_object)
-            )
+            EC.element_to_be_clickable(locator_object))
         return webelement
 
 
@@ -343,31 +343,38 @@ class Driver(object):
         return (locator_map[locator_type], locator_value)
 
     def get_date(self):
+        '''Return the current date.'''
         #ut_test_001
         return self.get_timestamp()[:10]
 
     def get_time(self):
+        '''Return the current time.'''
         # ut_test_002
         return self.get_timestamp()[-8:]
 
     def get_timestamp(self):
+        '''Return the current datetime.'''
         return str(datetime.now())[:-7]
 
     def make_valid_name(self, invalid_name):
+        '''Remove bad characters and return a valid name.'''
         tmp_name = invalid_name.strip()
         tmp_name = re.sub('[ -]', '_', tmp_name)
         tmp_name = re.sub('[()]', '', tmp_name)
         return tmp_name
 
     def pause(self, message_text=None):
+        '''Pause the current execution until the Enter key is pressed.'''
         if message_text:
             print(message_text)
         input('Press the ENTER key to continue.')
 
     def wait(self, seconds=0):
+        '''Pause the current execution for the given number of seconds.'''
         time.sleep(seconds)
 
     def throw(self, message):
+        '''Raise a FrameworkException error.'''
         raise FrameworkException(message)
 
 

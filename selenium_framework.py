@@ -53,12 +53,13 @@ from selenium.common.exceptions                 import TimeoutException
 # from selenium.webdriver.remote.webdriver        import WebDriver
 # from selenium.common                            import exceptions as EX
 # from selenium.common.exceptions                 import NoSuchElementException
+from selenium.common.exceptions                 import WebDriverException
 
 class Object(object):
     '''Generic object constructor'''
     # pass
 
-class FrameworkException(Exception):
+class FrameworkException(WebDriverException):
     '''Framework exception for deliberately thrown exceptions.'''
     # pass
 
@@ -91,7 +92,7 @@ class Driver(object):
             return alert_text
         except NoAlertPresentException:
             return False
-        except Exception:
+        except WebDriverException:
             self.throw(f'Unable to check the alert.')
 
     def control_click(self, webelement, container=None):
@@ -108,7 +109,7 @@ class Driver(object):
                 .perform()
             self.wait(.5)
             return True
-        except Exception:
+        except WebDriverException:
             return False
 
     def double_click(self, webelement, container=None):
@@ -121,7 +122,7 @@ class Driver(object):
             AC(container).double_click(webelement).perform()
             self.wait(.5)
             return True
-        except Exception:
+        except WebDriverException:
             return False
 
     def find(self, locator_string, container=None, wait=3):
@@ -181,7 +182,7 @@ class Driver(object):
                 field_value = webelement.get_attribute('value')
             else:
                 field_value = None
-        except Exception:
+        except WebDriverException:
             field_value = None
         return field_value
 
@@ -254,7 +255,7 @@ class Driver(object):
             AC(container).context_click(webelement).perform()
             self.wait(.5)
             return True
-        except Exception:
+        except WebDriverException:
             return False
 
     def scroll_into_view(self, webelement):
@@ -308,7 +309,7 @@ class Driver(object):
                 container.switch_to.frame(locator_value)
             else:
                 self.throw(f'Invalid switch-to target: {locator_string}')
-        except Exception:
+        except WebDriverException:
             self.throw(f'Unable to swtich to the target: {locator_string}')
 
     def wait_until_element_clickable(self, locator_string=None, timeout=30):

@@ -1,27 +1,11 @@
 #!/usr/bin/env python
 '''Unit test script for the Selenium Framework module.'''
 
-import re
 import os
+import re
+import timeit
 import unittest
 import selenium_framework as sf
-
-
-#######################################################################
-# Config
-
-BROWSER = 'js' # Valid options: ff, gc, js, ie
-BROWSER_OPTIONS = {
-    'headless': True,
-    'size': (800, 600),
-    'position': (0, 0)
-}
-BROWSER_PROFILE = None
-SELENIUM_HUB = 'local'
-SELENIUM_PORT = '4444'
-TEST_PAGE = f'file://{os.path.dirname(os.path.abspath(__file__))}/_sampleWebpage/TEST_PAGE.html'
-
-#######################################################################
 
 def intro_plan(title):
     '''Print a PLAN introduction.'''
@@ -315,4 +299,20 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main(warnings='ignore')
+    #######################################################################
+    # Config
+
+    BROWSER = 'js' # Valid options: ff, gc, js, ie
+    BROWSER_OPTIONS = {
+        'headless': True,
+        'size': (800, 600),
+        'position': (0, 0)
+    }
+    BROWSER_PROFILE = None
+    SELENIUM_HUB = 'local'
+    SELENIUM_PORT = '4444'
+    TEST_PAGE = f'file://{os.path.dirname(os.path.abspath(__file__))}/_sampleWebpage/TEST_PAGE.html'
+
+    #######################################################################
+
+    timeit.timeit(unittest.main(warnings='ignore'))

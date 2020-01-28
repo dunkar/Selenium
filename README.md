@@ -23,3 +23,13 @@ element.submit()
 assert driver.browser.title == 'SeleniumHQ at DuckDuckGo'
 driver.close()
 ```
+
+# Links
+[SeleniumHQ Website](https://seleniumhq.dev/)  
+[Selenium Repo](https://github.com/seleniumhq/selenium)  
+
+[Python API Documentation](https://selenium.dev/selenium/docs/api/py/index.html) 
+ 
+[Firefox Gecko Driver Documentation](https://firefox-source-docs.mozilla.org/testing/geckodriver/Support.html)  
+[Firefox Gecko Driver repo](https://github.com/mozilla/geckodriver/releases)  
+

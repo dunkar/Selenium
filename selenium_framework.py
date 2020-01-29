@@ -195,57 +195,73 @@ class Driver(object):
                        if button.is_selected()]
         return field_value
 
-    def open_local_ff(self, url=None, profile=None):
-        '''Open a local instance of Mozilla Firefox and
-        set the close method'''
-        if profile:
-            profile = WD.FirefoxProfile(profile)
-            self.browser = WD.Firefox(profile)
-        else:
-            self.browser = WD.Firefox()
-        self.close = self.browser.quit
-        if url:
-            self.goto(url)
+    # def open_local_ff(self, url=None, profile=None):
+    #     '''Open a local instance of Mozilla Firefox and
+    #     set the close method'''
+    #     if profile:
+    #         profile = WD.FirefoxProfile(profile)
+    #         self.browser = WD.Firefox(profile)
+    #     else:
+    #         self.browser = WD.Firefox()
+    #     self.close = self.browser.quit
+    #     if url:
+    #         self.goto(url)
 
-    def open_local_gc(self, url=None):
-        '''Open a local instance of Google Chrome and
-        set the close method'''
-        self.browser = WD.Chrome()
-        self.close = self.browser.quit
-        if url:
-            self.goto(url)
+    # def open_local_gc(self, url=None):
+    #     '''Open a local instance of Google Chrome and
+    #     set the close method'''
+    #     self.browser = WD.Chrome()
+    #     self.close = self.browser.quit
+    #     if url:
+    #         self.goto(url)
 
-    def open(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
+    def open(self, browser_name='Firefox', browser_options=None, selenium_options=None):
         '''Open a new instance of the selected browser and
         set the close method'''
-        browsers = {
-            #local driver name, remote driver capabilities
-            'ff': ('Firefox', 'FIREFOX'),
-            'gc': ('Chrome', 'CHROME'),
-            'hu': (None, 'HTMLUNITWITHJS'),
-            'ie': ('Ie', 'INTERNETEXPLORER'),
-            'js': ('PhantomJS', 'PHANTOMJS'),
-        }
-        local_driver, remote_driver = browsers[browser_name]
 
-        # Get the right driver
-        if selenium_hub == 'local' and browser_name != 'hu':
-            self.browser = getattr(WD, local_driver)()
-        elif selenium_hub != 'local':
-            command_executor = 'http://{0}:{1}/wd/hub'.format(selenium_hub, selenium_port)
-            desired_capabilities = getattr(WD.DesiredCapabilities, remote_driver)
-            self.browser = WD.Remote(
-                command_executor=command_executor,
-                desired_capabilities=desired_capabilities,
-                browser_profile=None)
-        else:
-            raise 'Invalid browser selection.'
+        if selenium_options and selenium_options.get('remote', False):
+            '''TODO: Add options for remote grid.'''
+            
+        if browser_options and browser_options.get('headless', False):
+            '''TODO: Setup headless browser options.'''
 
-        # Setup the driver close method
-        if selenium_hub == 'local' and browser_name == 'gc':
-            self.close = self.browser.quit
-        else:
+        try:
+            self.browser = getattr(WD, browser_name)()
             self.close = self.browser.close
+        except IndexError:
+            throw('Unknown browser selected.')
+
+    # def open_bak(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
+    #     '''Open a new instance of the selected browser and
+    #     set the close method'''
+    #     browsers = {
+    #         #local driver name, remote driver capabilities
+    #         'ff': ('Firefox', 'FIREFOX'),
+    #         'gc': ('Chrome', 'CHROME'),
+    #         'hu': (None, 'HTMLUNITWITHJS'),
+    #         'ie': ('Ie', 'INTERNETEXPLORER'),
+    #         'js': ('PhantomJS', 'PHANTOMJS'),
+    #     }
+    #     local_driver, remote_driver = browsers[browser_name]
+
+    #     # Get the right driver
+    #     if selenium_hub == 'local' and browser_name != 'hu':
+    #         self.browser = getattr(WD, local_driver)()
+    #     elif selenium_hub != 'local':
+    #         command_executor = 'http://{0}:{1}/wd/hub'.format(selenium_hub, selenium_port)
+    #         desired_capabilities = getattr(WD.DesiredCapabilities, remote_driver)
+    #         self.browser = WD.Remote(
+    #             command_executor=command_executor,
+    #             desired_capabilities=desired_capabilities,
+    #             browser_profile=None)
+    #     else:
+    #         raise 'Invalid browser selection.'
+
+        # # Setup the driver close method
+        # if selenium_hub == 'local' and browser_name == 'gc':
+        #     self.close = self.browser.quit
+        # else:
+        #     self.close = self.browser.close
 
     def right_click(self, webelement, container=None):
         '''Given a web element, right-click on it.'''

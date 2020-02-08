@@ -6,7 +6,6 @@ basic capabilities that are most frequently used (in my experience anyway).
 ## Instructions
 - Install Python version 3
 - Install the selenium bindings for Python: `pip install selenium`
-    - Note: If you wish to run the test_framework.py script, you also need to install pytest.
 - Install the selenium_framework.py file into a location searchable by Python
     - i.e. site-packages or the folder containing your project scripts
 

@@ -12,7 +12,6 @@ import selenium_framework as sf
 CONFIG = {
     'browser': 'Chrome',
     'headless': True,
-    'profile': '/Users/john/Library/Application Support/Google/Chrome/selenium',
     'browser_size': (800, 600),
     'browser_position': (0, 0),
     'remote_hub': False,    # (server_name_or_ip, port),

@@ -14,9 +14,17 @@ basic capabilities that are most frequently used (in my experience anyway).
 ```
 import selenium_framework as sf
 
+CONFIG = {
+    'browser': 'Chrome',
+    'headless': True,
+    'browser_size': (800, 600),
+    'browser_position': (0, 0),
+    'test_page': f'https://duckduckgo.com/'
+}
+
 driver = sf.Driver()
-driver.open('Firefox')   # Can be Chrome, Edge, Firefox, Ie, Opera, Safari. You must have the driver installed!
-driver.goto('https://duckduckgo.com/')
+driver.open(CONFIG)
+driver.goto(CONFIG['test_page'])
 
 element = driver.find('name=q') 
 element.send_keys('SeleniumHQ')

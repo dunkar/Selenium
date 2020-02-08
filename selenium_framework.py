@@ -7,10 +7,10 @@ most frequently used (in my experience anyway).
 ################################################################################
 # Selenium Framework
 __title__ = 'Selenium Framework'
-__version__ = '0.4.0'
+__version__ = '0.5.0'
 __copyright__ = '2011 - 2020'
 __author__ = 'John Dahl'
-__date__ = '2020-01-17'
+__date__ = '2020-02-08'
 __license__ = '''MIT License
 
 Copyright (c) 2011-2020 John Dahl
@@ -34,7 +34,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.'''
 ################################################################################
 
-# import os
 import re
 import time
 
@@ -55,24 +54,19 @@ from selenium.common.exceptions                 import TimeoutException
 # from selenium.common.exceptions                 import NoSuchElementException
 from selenium.common.exceptions                 import WebDriverException
 
-class Object(object):
-    '''Generic object constructor'''
-    # pass
-
 class FrameworkException(WebDriverException):
     '''Framework exception for deliberately thrown exceptions.'''
     # pass
 
-class Driver(object):
+class Driver():
     '''
     Main framework object. Everything runs from an instance of this object.
     '''
     def __init__(self):
-        self.WebElement = WebElement
-        self.Select = Select
-        self.Keys = Keys
         self.browser = None
         self.close = None
+        self.web_element = WebElement
+        self.keys = Keys
 
     ############################################################################
     # Browser-dependent Methods
@@ -136,7 +130,7 @@ class Driver(object):
         from the method as a WebElement.'''
         if not container:
             container = self.browser
-        loc_type, loc_value = self.convert_locator(locator_string)
+        loc_type, loc_value = self._convert_locator(locator_string)
         try:
             element_list = container.find_elements(by=loc_type, value=loc_value)
             if (not element_list and isinstance(wait, int) and wait > 0):
@@ -156,7 +150,7 @@ class Driver(object):
 
     def is_element_clickable(self, webelement):
         '''Given a web element, determine if it is eligable to click on it.'''
-        #if not isinstance(webelement, self.WebElement):
+        #if not isinstance(webelement, WebElement):
         #    return False
         if (webelement.is_displayed() and
                 webelement.is_enabled() and
@@ -195,58 +189,48 @@ class Driver(object):
                        if button.is_selected()]
         return field_value
 
-    # def open_local_ff(self, url=None, profile=None):
-    #     '''Open a local instance of Mozilla Firefox and
-    #     set the close method'''
-    #     if profile:
-    #         profile = WD.FirefoxProfile(profile)
-    #         self.browser = WD.Firefox(profile)
-    #     else:
-    #         self.browser = WD.Firefox()
-    #     self.close = self.browser.quit
-    #     if url:
-    #         self.goto(url)
+    def open(self, config=None):
+        '''
+        Open a new instance of the selected browser and
+        set the close method.
+        TODO: Add custom profile support.
+        TODO: Add remote/grid support.
+        '''
+        if not config:
+            browser = input('Which browser would you like to use: ').capitalize()
+            headless = True
+        else:
+            browser = config['browser']
+            headless = config['headless']
 
-    # def open_local_gc(self, url=None):
-    #     '''Open a local instance of Google Chrome and
-    #     set the close method'''
-    #     self.browser = WD.Chrome()
-    #     self.close = self.browser.quit
-    #     if url:
-    #         self.goto(url)
+        if browser == 'Chrome':
+            options = WD.chrome.options.Options()
+            if headless:
+                options.add_argument("--headless")
+                options.add_argument("--window-size=1920x1080")
+        elif browser == 'Firefox':
+            options = WD.firefox.options.Options()
+            options.headless = headless
 
-    def open(self, browser_name='Firefox', browser_options=None, selenium_options=None):
-        '''Open a new instance of the selected browser and
-        set the close method'''
-
-        if selenium_options and selenium_options.get('remote', False):
-            '''TODO: Add options for remote grid.'''
-            
-        if browser_options and browser_options.get('headless', False):
-            '''TODO: Setup headless browser options.'''
+        # Remote
+        # if config.get('remote_hub', False):
+        #     url, port = config['remote_hub']
+        #     if browser_name == 'Ie':
+        #         browser_name = 'INTERNETEXPLORER'
+        #     else:
+        #         browser_name = browser_name.upper()
+        #     self.browser = WD.Remote(
+        #         command_executor=f'http://{url}:{port}/wd/hub',
+        #         desired_capabilities=getattr(WD.DesiredCapabilities, browser_name),
+        #         browser_profile=browser_options['profile'])
 
         try:
-            self.browser = getattr(WD, browser_name)()
+            self.browser = getattr(WD, browser)(options=options)
             self.close = self.browser.close
         except IndexError:
-            throw('Unknown browser selected.')
+            self.throw('Unknown browser selected.')
 
     # def open_bak(self, browser_name='gc', selenium_hub='local', selenium_port='4444'):
-    #     '''Open a new instance of the selected browser and
-    #     set the close method'''
-    #     browsers = {
-    #         #local driver name, remote driver capabilities
-    #         'ff': ('Firefox', 'FIREFOX'),
-    #         'gc': ('Chrome', 'CHROME'),
-    #         'hu': (None, 'HTMLUNITWITHJS'),
-    #         'ie': ('Ie', 'INTERNETEXPLORER'),
-    #         'js': ('PhantomJS', 'PHANTOMJS'),
-    #     }
-    #     local_driver, remote_driver = browsers[browser_name]
-
-    #     # Get the right driver
-    #     if selenium_hub == 'local' and browser_name != 'hu':
-    #         self.browser = getattr(WD, local_driver)()
     #     elif selenium_hub != 'local':
     #         command_executor = 'http://{0}:{1}/wd/hub'.format(selenium_hub, selenium_port)
     #         desired_capabilities = getattr(WD.DesiredCapabilities, remote_driver)
@@ -256,12 +240,7 @@ class Driver(object):
     #             browser_profile=None)
     #     else:
     #         raise 'Invalid browser selection.'
-
-        # # Setup the driver close method
-        # if selenium_hub == 'local' and browser_name == 'gc':
-        #     self.close = self.browser.quit
-        # else:
-        #     self.close = self.browser.close
+    #    # Setup the driver close method
 
     def right_click(self, webelement, container=None):
         '''Given a web element, right-click on it.'''
@@ -314,7 +293,7 @@ class Driver(object):
             if container is None:
                 container = self.browser
             if locator_string is not None:
-                locator_type, locator_value = self.convert_locator(locator_string)
+                locator_type, locator_value = self._convert_locator(locator_string)
             else:
                 locator_type = None
             if locator_type in [None, '', 'top', 'default']:
@@ -330,7 +309,7 @@ class Driver(object):
 
     def wait_until_element_clickable(self, locator_string=None, timeout=30):
         '''Wait until the condition exists when the element is clickable or timeout.'''
-        locator_object = self.convert_locator(locator_string)
+        locator_object = self._convert_locator(locator_string)
         webelement = WebDriverWait(self.browser, timeout).until(
             EC.element_to_be_clickable(locator_object))
         return webelement
@@ -339,7 +318,7 @@ class Driver(object):
     ############################################################################
     # Browser-independent Utilities
     ############################################################################
-    def convert_locator(self, locator_string):
+    def _convert_locator(self, locator_string):
         '''Given a locator string in the format type=value
         return a tuple in the format (valid_type, value)'''
         locator_map = {

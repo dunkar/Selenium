@@ -49,12 +49,12 @@ class TestPlan002BasicBrowser(unittest.TestCase):
     '''Test basic browser functions.'''
     def setUp(self):
         self.driver = sf.Driver()
-        self.driver.open(
-            browser_name=BROWSER,
-            browser_options=BROWSER_OPTIONS,
-            selenium_options=SELENIUM_OPTIONS
-        )
-        self.driver.set_window(BROWSER_OPTIONS['size'], BROWSER_OPTIONS['position'])
+        self.driver.open(config=CONFIG)
+        #     browser_name=BROWSER,
+        #     browser_options=BROWSER_OPTIONS,
+        #     selenium_options=SELENIUM_OPTIONS
+        # )
+        # self.driver.set_window(BROWSER_OPTIONS['size'], BROWSER_OPTIONS['position'])
         self.driver.goto(TEST_PAGE)
 
     def tearDown(self):
@@ -243,12 +243,12 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
     '''Test the advanced features.'''
     def setUp(self):
         self.driver = sf.Driver()
-        self.driver.open(
-            browser_name=BROWSER,
-            browser_options=BROWSER_OPTIONS,
-            selenium_options=SELENIUM_OPTIONS
-        )
-        self.driver.set_window(BROWSER_OPTIONS['size'], BROWSER_OPTIONS['position'])
+        self.driver.open(config=CONFIG)
+        #     browser_name=BROWSER,
+        #     browser_options=BROWSER_OPTIONS,
+        #     selenium_options=SELENIUM_OPTIONS
+        # )
+        # self.driver.set_window(BROWSER_OPTIONS['size'], BROWSER_OPTIONS['position'])
         self.driver.goto(TEST_PAGE)
 
     def tearDown(self):
@@ -295,17 +295,26 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    BROWSER = 'Chrome' # Valid options: Chrome, Edge, Firefox, Ie, Opera, Safari
-    BROWSER_OPTIONS = {
+    # BROWSER = 'Chrome' # Valid options: Chrome, Edge, Firefox, Ie, Opera, Safari
+    # BROWSER_OPTIONS = \
+    # {
+    #     'headless': False,
+    #     'size': (800, 600),
+    #     'position': (0, 0),
+    #     'profile': '/Users/john/Library/Application Support/Google/Chrome/selenium',
+    # }
+    # SELENIUM_OPTIONS = {
+    #     'remote': False,
+    #     'hub': 'local',
+    #     'port': '4444'
+    # }
+    CONFIG = {
+        'browser': 'Chrome',
         'headless': True,
-        'size': (800, 600),
-        'position': (0, 0),
-        'profile': None
-    }
-    SELENIUM_OPTIONS = {
-        'remote': False,
-        'hub': 'local',
-        'port': '4444'
+        'profile': '/Users/john/Library/Application Support/Google/Chrome/selenium',
+        'browser_size': (800, 600),
+        'browser_position': (0, 0),
+        'remote_hub': False,    # (server_name_or_ip, port)
     }
     TEST_PAGE = f'file://{os.path.dirname(os.path.abspath(__file__))}/test_page.html'
 

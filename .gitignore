@@ -59,3 +59,4 @@ target/
 # Other stuff
 *.bak
 .vscode
+.pytest_cache

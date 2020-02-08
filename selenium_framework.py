@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
+# Selenium Framework
+
 A framework built around the Selenium WebDriver to simplify the basic capabilities that are
 most frequently used (in my experience anyway).
 '''
-################################################################################
-# Selenium Framework
 __title__ = 'Selenium Framework'
 __version__ = '0.5.0'
 __copyright__ = '2011 - 2020'
@@ -36,7 +36,6 @@ SOFTWARE.'''
 
 import re
 import time
-
 from datetime                                   import datetime
 
 from selenium                                   import webdriver as WD
@@ -49,10 +48,10 @@ from selenium.webdriver.support.ui              import WebDriverWait
 from selenium.webdriver.remote.webelement       import WebElement
 from selenium.common.exceptions                 import NoAlertPresentException
 from selenium.common.exceptions                 import TimeoutException
+from selenium.common.exceptions                 import WebDriverException
 # from selenium.webdriver.remote.webdriver        import WebDriver
 # from selenium.common                            import exceptions as EX
 # from selenium.common.exceptions                 import NoSuchElementException
-from selenium.common.exceptions                 import WebDriverException
 
 class FrameworkException(WebDriverException):
     '''Framework exception for deliberately thrown exceptions.'''

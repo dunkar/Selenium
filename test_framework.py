@@ -113,7 +113,7 @@ def test_plan02_case003_is_element_clickable():
 
     hidden_element = driver.wait_until_element_clickable('id=hidden3')
     assert driver.is_element_clickable(hidden_element)
-    assert not isinstance(hidden_element, list) #driver.WebElement)
+    assert isinstance(hidden_element, driver.web_element)
 
     driver.close()
 

@@ -50,11 +50,6 @@ class TestPlan002BasicBrowser(unittest.TestCase):
     def setUp(self):
         self.driver = sf.Driver()
         self.driver.open(config=CONFIG)
-        #     browser_name=BROWSER,
-        #     browser_options=BROWSER_OPTIONS,
-        #     selenium_options=SELENIUM_OPTIONS
-        # )
-        # self.driver.set_window(BROWSER_OPTIONS['size'], BROWSER_OPTIONS['position'])
         self.driver.goto(TEST_PAGE)
 
     def tearDown(self):
@@ -74,11 +69,11 @@ class TestPlan002BasicBrowser(unittest.TestCase):
 
         # Single Element By ID
         element_list = driver.find('id=text01')
-        self.assertTrue(isinstance(element_list, driver.WebElement))
+        self.assertTrue(isinstance(element_list, driver.web_element))
 
         # Hidden element
         element_list = driver.find('id=hidden1')
-        self.assertTrue(isinstance(element_list, driver.WebElement))
+        self.assertTrue(isinstance(element_list, driver.web_element))
         self.assertFalse(driver.is_element_clickable(element_list))
 
         # Multiple Elements By Tag Name
@@ -86,7 +81,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
         self.assertTrue(
             isinstance(element_list, list) and
             len(element_list) > 1 and
-            isinstance(element_list[0], driver.WebElement)
+            isinstance(element_list[0], driver.web_element)
             )
 
         # Invalid ID
@@ -109,7 +104,7 @@ class TestPlan002BasicBrowser(unittest.TestCase):
 
         hidden_element = driver.wait_until_element_clickable('id=hidden3')
         self.assertTrue(driver.is_element_clickable(hidden_element))
-        self.assertTrue(isinstance(hidden_element, driver.WebElement))
+        self.assertTrue(isinstance(hidden_element, driver.web_element))
 
     def test_004_text_fields(self):
         '''Test the .find method on text fields.'''
@@ -281,33 +276,14 @@ class TestPlan003AdvancedFeatures(unittest.TestCase):
 #     d = self.driver
 #     d.open()
 #     d.goto(URL)
-#     '''Do something here'''
+#     element = d.find('id=select02')
+#     # do something with the element
+#     self.assertTrue('some condition')
 #     d.close()
-#
-# def TEMPLATE_test_000_do_something(self):
-#     d = self.driver
-#     field_locator = 'id=select02'
-#     field_element = d.find(field_locator)
-#     # do something here
-#     self.assertTrue(False)
-#
-#  ############################################################################
+# ############################################################################
 
 
 if __name__ == '__main__':
-    # BROWSER = 'Chrome' # Valid options: Chrome, Edge, Firefox, Ie, Opera, Safari
-    # BROWSER_OPTIONS = \
-    # {
-    #     'headless': False,
-    #     'size': (800, 600),
-    #     'position': (0, 0),
-    #     'profile': '/Users/john/Library/Application Support/Google/Chrome/selenium',
-    # }
-    # SELENIUM_OPTIONS = {
-    #     'remote': False,
-    #     'hub': 'local',
-    #     'port': '4444'
-    # }
     CONFIG = {
         'browser': 'Chrome',
         'headless': True,
